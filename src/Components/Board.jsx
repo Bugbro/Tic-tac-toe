@@ -3,6 +3,7 @@ import Square from './Square'
 
 const Board = () => {
     const [state, setState] = useState(Array(9).fill(null));
+    const [active, setActive] = useState(Array(9).fill(false));
     const [isXTurn, setXTurn] = useState(true);
 
     const checkWinner = ()=>{
@@ -19,6 +20,9 @@ const Board = () => {
         for(let logic of winneLogic){
             const [a,b,c] = logic;
             if(state[a] !== null && state[a] === state[b] && state[b]=== state[c] && state[a]=== state[c]){
+                setTimeout(()=>{
+                    alert(`Player ${state[a]} Won` );
+                },1000);
                 return state[a];
             }
         };
@@ -34,9 +38,13 @@ const Board = () => {
         copyState[index] = isXTurn ? "X":"O";
         setState(copyState);
         setXTurn(!isXTurn);
+        const copyActive = [...active];
+        copyActive[index] = true;
+        setActive(copyActive);
     }
     const reset = ()=>{
         setState(Array(9).fill(null));
+        setActive(Array(9).fill(false));
         setXTurn(true);
     }
 
@@ -44,27 +52,27 @@ const Board = () => {
     
   return (
     <>
-        <div className="board-container">
+        <div className="board-container ">
             <h1> Tic Tac Toe Game :</h1>
-            {isWinner ? <>{isWinner} Won <button onClick={reset } >Play Again</button></>: (
+            {isWinner ? <><h4 className='my-4'>{isWinner} Won</h4> <button className='my-4 fw-bold  btn-lg  btn btn-success' onClick={reset } >Play Again</button></>: (
                 <>
-                <h4>{isXTurn ? "X" : "O"} Turn</h4>
-                <div className="board-row">
-                    <Square onClick={()=> handleClick(0)} value={state[0]}/>
-                    <Square onClick={()=> handleClick(1)} value={state[1]}/>
-                    <Square onClick={()=> handleClick(2)} value={state[2]}/>
+                <h4 className='my-4'>Player Turn : {isXTurn ? "X" : "O"} </h4>
+                <div className="board-row mt-4">
+                    <Square onClick={()=> handleClick(0)} classActive={active[0]} value={state[0]}/>
+                    <Square onClick={()=> handleClick(1)} classActive={active[1]} value={state[1]}/>
+                    <Square onClick={()=> handleClick(2)} classActive={active[2]} value={state[2]}/>
                 </div>
                 <div className="board-row">
-                    <Square onClick={()=> handleClick(3)} value={state[3]}/>
-                    <Square onClick={()=> handleClick(4)} value={state[4]}/>
-                    <Square onClick={()=> handleClick(5)} value={state[5]}/>
+                    <Square onClick={()=> handleClick(3)} classActive={active[3]} value={state[3]}/>
+                    <Square onClick={()=> handleClick(4)} classActive={active[4]} value={state[4]}/>
+                    <Square onClick={()=> handleClick(5)} classActive={active[5]} value={state[5]}/>
                 </div>
                 <div className="board-row">
-                    <Square onClick={()=> handleClick(6)} value={state[6]}/>
-                    <Square onClick={()=> handleClick(7)} value={state[7]}/>
-                    <Square onClick={()=> handleClick(8)} value={state[8]}/>
+                    <Square onClick={()=> handleClick(6)} classActive={active[6]} value={state[6]}/>
+                    <Square onClick={()=> handleClick(7)} classActive={active[7]} value={state[7]}/>
+                    <Square onClick={()=> handleClick(8)} classActive={active[8]} value={state[8]}/>
                 </div>
-                <button onClick={reset} >Reset</button>
+                <button className='my-4 fw-bold  btn-lg  btn btn-danger' onClick={reset} >Reset</button>
                 </>)
             }
             
